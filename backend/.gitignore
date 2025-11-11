@@ -1,0 +1,5 @@
+# Dependencias de Node
+node_modules
+
+# ¡No subir la llave secreta de Firebase!
+serviceAccountKey.json
