@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api"; // Usamos la API
 
-// Interfaces alineadas con tu Backend
+// Interfaces alineadas con Backend
 interface PerfilNutricional {
     altura: number;
     peso: number;
@@ -92,9 +92,8 @@ export default function DashboardNutricionista() {
                                     Copiar ID
                                 </button>
                                 <Link
-                                    href={`/paciente/${paciente.uid}/planes`} // Ruta futura para ver detalle
-                                    className="flex-1 bg-green-50 text-green-700 py-2 rounded hover:bg-green-100 text-center text-sm font-medium"
-                                >
+                                    href={`/paciente/${paciente.uid}/progreso`}
+                                    className="flex-1 bg-green-50 text-green-700 py-2 rounded hover:bg-green-100 text-center text-sm font-medium transition-colors"                                >
                                     Ver Historial
                                 </Link>
                             </div>

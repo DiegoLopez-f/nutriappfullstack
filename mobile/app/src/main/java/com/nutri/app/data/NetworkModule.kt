@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.nutri.app.data.model.Alimento
 import com.nutri.app.data.model.Plan
 import com.nutri.app.data.model.PlanPayload
+import com.nutri.app.data.model.RegistroUsuarioPayload
 import com.nutri.app.data.model.Usuario
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -19,7 +20,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 // IP local para conectar al backend
-private const val BASE_URL = "http://10.0.2.2:3000/"
+private const val BASE_URL = "http://192.168.51.174:3000/"
 
 // Interceptor para añadir el token a las solicitudes
 class AuthInterceptor : Interceptor {
@@ -72,7 +73,11 @@ interface ApiService {
 
     // Actualizar perfil usuario
     @PUT("api/perfil")
-    suspend fun actualizarMiPerfil(@Body updates: Map<String, Any?>): Usuario
+    suspend fun actualizarMiPerfil(@Body updates: Map<String, @JvmSuppressWildcards Any?>): Usuario
+
+    // REGISTRO DE USUARIO (Nuevo)
+    @POST("api/usuarios")
+    suspend fun registrarUsuario(@Body payload: RegistroUsuarioPayload): Usuario
 }
 
 object RetrofitClient {

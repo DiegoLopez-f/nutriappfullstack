@@ -31,3 +31,20 @@ data class PlanPayload(
     val objetivo: String,
     val comidas: List<ComidaPayload>
 )
+
+// Payload para registrar usuario
+data class RegistroUsuarioPayload(
+    val uid: String,
+    val email: String,
+    val nombre: String,
+    val tipo: Int = 2, // 2 = Paciente por defecto
+    val perfil_nutricional: PerfilNutricionalPayload = PerfilNutricionalPayload()
+)
+
+data class PerfilNutricionalPayload(
+    val altura: Double = 0.0,
+    val peso: Double = 0.0,
+    val objetivo: String = "Sin definir",
+    val alergias: List<String> = emptyList(),
+    val restricciones: List<String> = emptyList()
+)

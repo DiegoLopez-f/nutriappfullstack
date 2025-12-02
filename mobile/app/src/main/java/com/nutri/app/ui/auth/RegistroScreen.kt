@@ -10,14 +10,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
+// Importaciones necesarias para la llamada a la API
+import kotlinx.coroutines.launch
+import com.nutri.app.data.RetrofitClient
+import com.nutri.app.data.model.RegistroUsuarioPayload
 
 @Composable
 fun RegistroScreen(
-    onRegistroExitoso: (String, () -> Unit) -> Unit, // Devuelve el UID
+    onRegistroExitoso: (String, () -> Unit) -> Unit,
     onVolverAlLogin: () -> Unit
 ) {
     val context = LocalContext.current
     val auth = FirebaseAuth.getInstance()
+    // Necesitamos un scope para ejecutar la llamada al backend
+    val scope = rememberCoroutineScope()
 
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -33,7 +39,6 @@ fun RegistroScreen(
     ) {
         Text("Crear cuenta", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(20.dp))
-
 
         OutlinedTextField(
             value = nombre,
@@ -51,6 +56,8 @@ fun RegistroScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -63,24 +70,46 @@ fun RegistroScreen(
 
         Button(
             onClick = {
-                if (email.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Completa email y contraseña", Toast.LENGTH_SHORT).show()
+                if (email.isBlank() || password.isBlank() || nombre.isBlank()) {
+                    Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
 
                 isLoading = true
+
+                // 1. Crear usuario en Firebase
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { result ->
                         val uid = result.user?.uid ?: return@addOnSuccessListener
 
+                        // 2. Llamar al Backend para guardar los datos (ESTO FALTABA)
+                        scope.launch {
+                            try {
+                                val payload = RegistroUsuarioPayload(
+                                    uid = uid,
+                                    email = email,
+                                    nombre = nombre,
+                                    tipo = 2 // Paciente
+                                    // perfil_nutricional se envía por defecto con valores vacíos
+                                )
 
-                        Toast.makeText(context, "Cuenta creada", Toast.LENGTH_SHORT).show()
-                        onRegistroExitoso(uid) {
-                            isLoading = false
+                                RetrofitClient.api.registrarUsuario(payload)
+
+                                Toast.makeText(context, "Cuenta creada exitosamente", Toast.LENGTH_SHORT).show()
+
+                                // Navegar
+                                onRegistroExitoso(uid) {
+                                    isLoading = false
+                                }
+                            } catch (e: Exception) {
+                                // Si falla el backend, mostramos error (y opcionalmente borramos el usuario de Auth)
+                                Toast.makeText(context, "Error guardando datos: ${e.message}", Toast.LENGTH_LONG).show()
+                                isLoading = false
+                            }
                         }
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error Firebase: ${e.message}", Toast.LENGTH_SHORT).show()
                         isLoading = false
                     }
             },

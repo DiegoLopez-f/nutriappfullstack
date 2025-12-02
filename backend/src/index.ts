@@ -391,26 +391,38 @@ app.get('/api/perfil', verifyFirebaseToken, async (req: Request, res: Response) 
     }
 });
 
- // Endpoint para ACTUALIZAR el perfil del usuario logueado.
+// Endpoint para ACTUALIZAR el perfil del usuario logueado.
 app.put('/api/perfil', verifyFirebaseToken, async (req: Request, res: Response) => {
     try {
+        console.log("Body recibido:", JSON.stringify(req.body, null, 2));
         const uid = req.user?.uid;
         if (!uid) {
             return res.status(403).send({ message: 'Usuario no válido.' });
         }
 
-        // 1. Obtener los datos del body (peso, altura, objetivo)
-        const { peso, altura, objetivo, nombre } = req.body;
+        // 1. Obtener los datos del body
+        // Ahora esperamos 'perfil_nutricional' como objeto, además del nombre
+        const { nombre, perfil_nutricional } = req.body;
 
         const updates: { [key: string]: any } = {
             actualizadoEn: admin.firestore.FieldValue.serverTimestamp()
         };
 
-        // 2. Construir el objeto de actualización solo con los campos que llegaron
-        if (peso !== undefined) updates.peso = peso;
-        if (altura !== undefined) updates.altura = altura;
-        if (objetivo !== undefined) updates.objetivo = objetivo;
-        if (nombre !== undefined) updates.nombre = nombre; // Permitir actualizar el nombre
+        // 2. Construir el objeto de actualización
+
+        // Actualizar nombre si viene
+        if (nombre !== undefined) updates.nombre = nombre;
+
+        // Actualizar campos del perfil nutricional si viene el objeto
+        if (perfil_nutricional && typeof perfil_nutricional === 'object') {
+            const { peso, altura, objetivo } = perfil_nutricional;
+
+            // Usamos notación de punto para actualizar SOLO lo que cambió dentro del mapa
+            // sin borrar otros datos que pudieran existir ahí (como alergias).
+            if (peso !== undefined) updates['perfil_nutricional.peso'] = peso;
+            if (altura !== undefined) updates['perfil_nutricional.altura'] = altura;
+            if (objetivo !== undefined) updates['perfil_nutricional.objetivo'] = objetivo;
+        }
 
         // 3. Actualizar el documento en Firestore
         const userRef = db.collection('usuarios').doc(uid);

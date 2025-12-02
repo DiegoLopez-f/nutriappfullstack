@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-text:1.6.8") // Para KeyboardOptions
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.compose.material:material-icons-extended:1.6.8") // Para íconos bonitos
 
     // Kotlin coroutines
     implementation(libs.kotlinx.coroutines.core)
