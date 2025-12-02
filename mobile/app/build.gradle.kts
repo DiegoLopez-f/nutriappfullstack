@@ -41,6 +41,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -57,6 +60,20 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation ("androidx.biometric:biometric:1.1.0")
+
+    // JUnit 5 (Jupiter)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
+    // Mockk
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+
+    // Coroutines Test
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Helper para LiveData/StateFlow (opcional pero útil)
+    testImplementation(libs.androidx.core.testing)
 
 
 
@@ -89,4 +106,8 @@ dependencies {
     // (Opcional pero RECOMENDADO) Interceptor para ver las llamadas en Logcat
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

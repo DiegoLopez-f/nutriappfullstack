@@ -16,6 +16,9 @@ navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 googleGmsGoogleServices = "4.4.2"
 kotlinxCoroutines = "1.8.0"
+junitJupiter = "5.10.0"
+mockk = "1.13.8"
+archCore = "2.2.0"
 
 [libraries]
 # AndroidX
@@ -57,6 +60,13 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 # Otras
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
