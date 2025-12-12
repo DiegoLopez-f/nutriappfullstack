@@ -55,7 +55,7 @@ class PlanViewModelTest {
 
     @Test
     fun `cargarPlanes actualiza lista de planes cuando es exitoso`() = runTest {
-        // GIVEN
+
         val planesDummy = listOf(
             Plan(id = "1", nombre = "Plan Keto"),
             Plan(id = "2", nombre = "Plan Vegano")
@@ -63,12 +63,12 @@ class PlanViewModelTest {
         // El repositorio real no pide argumentos en obtenerPlanes()
         coEvery { repository.obtenerPlanes() } returns planesDummy
 
-        // WHEN
+
         // El ViewModel real no pide UID, lo saca de Firebase internamente (o del repo)
         viewModel.cargarPlanes()
         advanceUntilIdle()
 
-        // THEN
+
         assertEquals(planesDummy, viewModel.planes.value)
         assertFalse(viewModel.isLoading.value)
         assertNull(viewModel.errorMessage.value)
@@ -76,15 +76,15 @@ class PlanViewModelTest {
 
     @Test
     fun `cargarPlanes maneja errores y actualiza errorMessage`() = runTest {
-        // GIVEN
+
         val mensajeError = "Error de conexión"
         coEvery { repository.obtenerPlanes() } throws Exception(mensajeError)
 
-        // WHEN
+
         viewModel.cargarPlanes()
         advanceUntilIdle()
 
-        // THEN
+
         assertTrue(viewModel.planes.value.isEmpty())
         assertEquals(mensajeError, viewModel.errorMessage.value)
         assertFalse(viewModel.isLoading.value)
@@ -92,7 +92,7 @@ class PlanViewModelTest {
 
     @Test
     fun `crearPlanCompleto llama al repositorio exitosamente`() = runTest {
-        // GIVEN
+
         val nombre = "Plan Nuevo"
         val tipo = "Keto"
         val desc = "Descripción"
@@ -113,19 +113,19 @@ class PlanViewModelTest {
         } just Runs
 
         // 2. Mock de obtenerPlanes (NECESARIO porque el ViewModel recarga la lista al finalizar)
-        // <-- AGREGAR ESTO:
+
         coEvery { repository.obtenerPlanes() } returns emptyList()
 
         // Callback de éxito
         var exitoLlamado = false
 
-        // WHEN
+
         viewModel.crearPlanCompleto(nombre, tipo, desc, obj, listaComidas) {
             exitoLlamado = true
         }
         advanceUntilIdle()
 
-        // THEN
+
         assertTrue(exitoLlamado)
         assertFalse(viewModel.isLoading.value)
         assertNull(viewModel.errorMessage.value) // Ahora esto pasará
@@ -137,7 +137,6 @@ class PlanViewModelTest {
 
     @Test
     fun `crearPlanCompleto maneja errores`() = runTest {
-        // GIVEN
         val comidaDummy = Comida(nombre = "Desayuno", alimentos = listOf(mockk(relaxed = true)))
         val errorMsg = "Fallo al guardar"
 
@@ -145,11 +144,9 @@ class PlanViewModelTest {
             repository.crearPlan(any(), any(), any(), any(), any(), any())
         } throws Exception(errorMsg)
 
-        // WHEN
         viewModel.crearPlanCompleto("Nombre", "Tipo", "Desc", "Obj", listOf(comidaDummy)) {}
         advanceUntilIdle()
 
-        // THEN
         assertEquals(errorMsg, viewModel.errorMessage.value)
         assertFalse(viewModel.isLoading.value)
     }

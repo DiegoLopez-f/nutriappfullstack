@@ -32,7 +32,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Perfil : Screen("perfil", "Perfil", Icons.Filled.Person)
 }
 
-@OptIn(ExperimentalMaterial3Api::class) // Soluciona el error de API experimental
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppScreen(
     onLogout: () -> Unit

@@ -22,7 +22,6 @@ class HomeRepository {
         return try {
             val planes = api.getMisPlanes()
             // Ordenamos por fecha (si existe) y tomamos el primero, o simplemente el primero de la lista
-            // Asumimos que el backend devuelve los planes, tomamos el último añadido o el primero disponible.
             planes.firstOrNull()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -39,7 +38,6 @@ class HomeRepository {
         }
     }
 
-    // 👇 AGREGA ESTO AQUÍ (Paso 2) 👇
     // Obtener lista de pacientes para el dashboard del nutricionista
     suspend fun obtenerPacientes(): List<Usuario> {
         return try {

@@ -19,11 +19,11 @@ class HomeViewModel(private val repository: HomeRepository = HomeRepository()) :
     private val _planActivo = MutableStateFlow<Plan?>(null)
     val planActivo: StateFlow<Plan?> = _planActivo
 
-    // --- NUEVO: Estado Lista de Pacientes (Solo para Nutricionista) ---
+    // ---  Estado Lista de Pacientes (Solo para Nutricionista) ---
     private val _pacientes = MutableStateFlow<List<Usuario>>(emptyList())
     val pacientes: StateFlow<List<Usuario>> = _pacientes
 
-    // --- NUEVO: Estado para el Buscador ---
+    // ---  Estado para el Buscador ---
     private val _busqueda = MutableStateFlow("")
     val busqueda: StateFlow<String> = _busqueda
 
@@ -65,7 +65,7 @@ class HomeViewModel(private val repository: HomeRepository = HomeRepository()) :
         }
     }
 
-    // --- NUEVO: Función para actualizar el texto de búsqueda ---
+    // ---  Función para actualizar el texto de búsqueda ---
     fun setBusqueda(query: String) {
         _busqueda.value = query
     }

@@ -33,8 +33,8 @@ class PlanesRepository {
         pacienteId: String,
         nombrePlan: String,
         tipoPlan: String,
-        descripcionPlan: String, // <-- ¡¡NUEVO!!
-        objetivo: String,        // <-- ¡¡NUEVO!!
+        descripcionPlan: String,
+        objetivo: String,
         comidas: List<Comida>
     ) {
 
@@ -57,8 +57,8 @@ class PlanesRepository {
             pacienteId = pacienteId,
             nombre = nombrePlan,
             tipo = tipoPlan,
-            descripcionPlan = descripcionPlan, // <-- ¡¡NUEVO!!
-            objetivo = objetivo,               // <-- ¡¡NUEVO!!
+            descripcionPlan = descripcionPlan,
+            objetivo = objetivo,
             comidas = comidasPayload
         )
 

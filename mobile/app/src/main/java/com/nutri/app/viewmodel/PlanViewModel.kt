@@ -117,8 +117,8 @@ class PlanViewModel(private val repository: PlanesRepository = PlanesRepository(
     fun crearPlanCompleto(
         nombrePlan: String,
         tipoPlan: String,
-        descripcionPlan: String, // <-- ¡¡NUEVO!!
-        objetivo: String,        // <-- ¡¡NUEVO!!
+        descripcionPlan: String,
+        objetivo: String,
         comidas: List<Comida>,
         onExito: () -> Unit
     ) {
@@ -137,8 +137,8 @@ class PlanViewModel(private val repository: PlanesRepository = PlanesRepository(
                     pacienteId,
                     nombrePlan,
                     tipoPlan,
-                    descripcionPlan, // <-- ¡¡NUEVO!!
-                    objetivo,        // <-- ¡¡NUEVO!!
+                    descripcionPlan,
+                    objetivo,
                     comidas
                 )
 
