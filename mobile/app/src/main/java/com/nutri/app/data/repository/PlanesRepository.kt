@@ -34,7 +34,15 @@ class PlanesRepository {
             null
         }
     }
-
+    suspend fun obtenerPacientes(): List<Usuario> {
+        return try {
+            // Reutilizamos el endpoint que ya usas en Home para ver tus pacientes
+            api.getPacientes()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
     /**
      * (C)RUD - CREAR un nuevo plan para el usuario logueado
      **/
