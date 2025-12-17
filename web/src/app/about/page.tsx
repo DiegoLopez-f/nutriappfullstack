@@ -1,17 +1,20 @@
-"use client"; // Esta directiva convierte el componente en un Client Component, permitiendo el uso de event handlers como onError.
+"use client";
 
 import React from 'react';
 
-// Este componente representa la vista "Sobre Nosotros" con el estilo de la página.
-// Utiliza las clases de Tailwind CSS para asegurar la coherencia visual y el diseño responsivo.
+// Definimos la estructura de los datos que recibe el componente
+interface TeamMemberProps {
+    name: string;
+    role: string;
+    avatarUrl: string;
+}
+
 export default function AboutUs() {
     return (
         <div className="min-h-screen pt-16 pb-12 flex flex-col items-center p-4">
-
-            {/* Contenedor Principal Centrado */}
             <main className="w-full max-w-4xl space-y-12">
 
-                {/* Sección Título Principal */}
+                {/* Header */}
                 <header className="text-center mb-12 border-b border-foreground/10 pb-4">
                     <h1 className="text-5xl font-bold tracking-tight mb-2">
                         Acerca de NutriAPP
@@ -21,9 +24,8 @@ export default function AboutUs() {
                     </p>
                 </header>
 
-                {/* Sección 1: Nuestra Historia y Misión (AHORA CON EL TEXTO DE NUTRIAPP) */}
-                <section
-                    className="bg-white text-gray-900 shadow-xl rounded-xl p-8 transition duration-300 hover:shadow-2xl border border-gray-200">
+                {/* Misión */}
+                <section className="bg-white text-gray-900 shadow-xl rounded-xl p-8 transition duration-300 hover:shadow-2xl border border-gray-200">
                     <h2 className="text-3xl font-semibold mb-4 text-center">
                         Nuestra Misión: Nutrición Personalizada
                     </h2>
@@ -39,10 +41,8 @@ export default function AboutUs() {
                     </p>
                 </section>
 
-                {/* Sección 2: Nuestro Enfoque y Valores (Mantiene el blanco y negro) */}
+                {/* Valores */}
                 <section className="grid md:grid-cols-3 gap-8 text-center">
-
-                    {/* Tarjeta de Valor 1 */}
                     <div className="p-6 bg-white text-gray-900 rounded-xl shadow-lg border border-gray-200">
                         <div className="text-4xl mb-3">🛠️</div>
                         <h3 className="text-xl font-semibold mb-2">Innovación Constante</h3>
@@ -51,7 +51,6 @@ export default function AboutUs() {
                         </p>
                     </div>
 
-                    {/* Tarjeta de Valor 2 */}
                     <div className="p-6 bg-white text-gray-900 rounded-xl shadow-lg border border-gray-200">
                         <div className="text-4xl mb-3">🤝</div>
                         <h3 className="text-xl font-semibold mb-2">Transparencia</h3>
@@ -60,7 +59,6 @@ export default function AboutUs() {
                         </p>
                     </div>
 
-                    {/* Tarjeta de Valor 3 */}
                     <div className="p-6 bg-white text-gray-900 rounded-xl shadow-lg border border-gray-200">
                         <div className="text-4xl mb-3">🌟</div>
                         <h3 className="text-xl font-semibold mb-2">Impacto Positivo</h3>
@@ -70,24 +68,27 @@ export default function AboutUs() {
                     </div>
                 </section>
 
-                {/* Sección 3: El Equipo (Placeholder) (Mantiene el blanco y negro) */}
+                {/* Equipo */}
                 <section className="bg-white text-gray-900 shadow-xl rounded-xl p-8 border border-gray-200">
                     <h2 className="text-3xl font-semibold mb-6 text-center">
                         Conoce al Equipo
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-items-center">
-
-                        {/* Miembro 1 */}
-                        <TeamMember name="Diego López" role="CEO & Fundador"
-                                    avatarUrl="https://placehold.co/100x100/171717/ffffff?text=DL"/>
-
-                        {/* Miembro 2 */}
-                        <TeamMember name="Kevin Henriquez" role="Jefe de Tecnología"
-                                    avatarUrl="https://placehold.co/100x100/171717/ffffff?text=KH"/>
-
-                        {/* Miembro 3 */}
-                        <TeamMember name="Christian Pérez" role="Diseñador Principal"
-                                    avatarUrl="https://placehold.co/100x100/171717/ffffff?text=CP"/>
+                        <TeamMember
+                            name="Diego López"
+                            role="CEO & Fundador"
+                            avatarUrl="https://placehold.co/100x100/171717/ffffff?text=DL"
+                        />
+                        <TeamMember
+                            name="Kevin Henriquez"
+                            role="Jefe de Tecnología"
+                            avatarUrl="https://placehold.co/100x100/171717/ffffff?text=KH"
+                        />
+                        <TeamMember
+                            name="Christian Pérez"
+                            role="Diseñador Principal"
+                            avatarUrl="https://placehold.co/100x100/171717/ffffff?text=CP"
+                        />
                     </div>
                     <p className="mt-8 text-center text-gray-500">
                         Somos un grupo de apasionados por la tecnología y la comunidad.
@@ -99,17 +100,17 @@ export default function AboutUs() {
     );
 }
 
-// Sub-Componente para miembros del equipo (Reutilizable)
-const TeamMember = ({name, role, avatarUrl}) => (
+// CORRECCIÓN APLICADA AQUÍ: Tipado explícito de las props
+const TeamMember = ({ name, role, avatarUrl }: TeamMemberProps) => (
     <div className="flex flex-col items-center text-center">
-        {/* Imagen del miembro del equipo */}
         <img
             src={avatarUrl}
             alt={`Avatar de ${name}`}
             className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-gray-200"
             onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://placehold.co/100x100/94a3b8/0f172a?text=👤";
+                const target = e.target as HTMLImageElement; // Tipado del evento
+                target.onerror = null;
+                target.src = "https://placehold.co/100x100/94a3b8/0f172a?text=👤";
             }}
         />
         <p className="font-semibold text-base">{name}</p>
