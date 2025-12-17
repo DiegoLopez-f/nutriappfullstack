@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import CardPlan from '@/components/CardPlan';
 import TableAlimentos from '@/components/TableAlimentos';
 
 // Interfaces para visualización
