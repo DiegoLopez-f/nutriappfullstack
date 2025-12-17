@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { app } from '@/lib/firebase';
-import { api } from '@/services/api';
+import { onAuthStateChanged, User } from 'firebase/auth';
+// 1. CORRECCIÓN: Importamos 'auth' directamente, 'app' no es necesario
+import { auth } from '@/lib/firebase';
+// 2. CORRECCIÓN: La ruta correcta es '@/lib/api'
+import { api } from '@/lib/api';
 
 interface AuthState {
     user: User | null;
-    role: string | null;
+    role: 'nutricionista' | 'paciente' | null; // Tipado más estricto
     loading: boolean;
 }
 
@@ -19,29 +21,30 @@ export function useAuth() {
     });
 
     useEffect(() => {
-        const auth = getAuth(app);
+        // No necesitamos getAuth(app) porque ya importamos 'auth' inicializado
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    // Intentamos obtener el rol desde el backend
                     const perfil = await api.getPerfil();
+
+                    // 3. LOGICA EXTRA: El backend devuelve 'tipo' (1 o 2), no 'role'.
+                    // Hacemos el mapeo aquí para que el resto de la app entienda strings.
+                    const userRole = perfil.tipo === 1 ? 'nutricionista' : 'paciente';
+
                     setAuthState({
                         user,
-                        role: perfil.role || 'paciente', // Fallback a paciente si no hay rol
+                        role: userRole,
                         loading: false,
                     });
                 } catch (error) {
                     console.error("Error obteniendo rol:", error);
-                    // Si falla la API pero estamos logueados en Firebase,
-                    // asumimos un rol seguro (paciente) para no bloquear la app
                     setAuthState({
                         user,
-                        role: 'paciente',
+                        role: 'paciente', // Fallback seguro
                         loading: false,
                     });
                 }
             } else {
-                // No hay usuario logueado
                 setAuthState({
                     user: null,
                     role: null,
